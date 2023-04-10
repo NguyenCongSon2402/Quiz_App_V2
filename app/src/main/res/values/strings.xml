@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Quiz_App</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="navi_home">Home</string>
+    <string name="navi_rank">Ranking</string>
+    <string name="navi_account">Account</string>
+    <string name="navi_logout">Logout</string>
+    <string name="navigation_drawer_open">0pen navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+</resources>

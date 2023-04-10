@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:background="@color/teal_700"
+    android:padding="20dp"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image_avatar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/logo_quiz" />
+
+    <TextView
+        android:id="@+id/tv_name_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:text="Son"
+        android:textColor="@color/black"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_email_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="suytdeptrai2402@gmail.com"
+        android:textColor="@color/black"
+        android:textSize="16dp" />
+
+</LinearLayout>

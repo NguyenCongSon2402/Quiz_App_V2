@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.343" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/drawable/category_layout.xml" value="0.1925" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.3425" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/drawable/ic_baseline_question_answer_24.xml" value="0.3425" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/drawable/ic_baseline_star_rate_24.xml" value="0.3425" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/drawable/ic_launcher_background.xml" value="0.343" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/drawable/nav_item_color_state.xml" value="0.343" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/activity_done.xml" value="0.3625" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/activity_forgot_password.xml" value="0.33" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/activity_home.xml" value="0.33" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/activity_main.xml" value="0.3625" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/activity_playing.xml" value="0.3625" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/activity_register_user.xml" value="0.3625" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/activity_register_user2.xml" value="0.3625" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/activity_score_detail.xml" value="0.3625" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/activity_start.xml" value="0.25" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/category_layout.xml" value="0.33" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/fragment_category_fargment.xml" value="0.25" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/fragment_ranking.xml" value="0.33" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/home_layout.xml" value="0.33" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/home_navigation_layout.xml" value="0.14" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/layout_header.xml" value="0.3484375" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/layout_ranking.xml" value="0.3625" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/score_detail_layout.xml" value="0.3614583333333333" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/layout/sign_up_layout.xml" value="0.33" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/menu/bottom_menu.xml" value="0.18541666666666667" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/menu/meni_navigation.xml" value="0.3625" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/menu/menu_navigation.xml" value="0.3625" />
+        <entry key="..\:/ProjectAndroid/Quiz_App/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.343" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
