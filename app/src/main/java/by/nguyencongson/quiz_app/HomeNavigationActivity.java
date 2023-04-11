@@ -26,6 +26,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
@@ -75,12 +78,8 @@ public class HomeNavigationActivity extends AppCompatActivity implements Navigat
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_navigation_layout);
-
         initUi();
         showUserInfomation();
-
-        // Chưa đến 1 s thì hệ thống nó đã load đến đây r => Common.user null
-        //showUserInfomation(emailUsers, Common.currentUser);
         loadDefaultFragment();
     }
 
@@ -92,6 +91,9 @@ public class HomeNavigationActivity extends AppCompatActivity implements Navigat
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView = findViewById(R.id.navigation_view);
+//        navigationView.setItemIconTintList(null);
+//        NavController navController = Navigation.findNavController(this, R.id.frame_layout);
+//        NavigationUI.setupWithNavController(navigationView, navController);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
@@ -99,6 +101,7 @@ public class HomeNavigationActivity extends AppCompatActivity implements Navigat
         tv_email_user = navigationView.getHeaderView(0).findViewById(R.id.tv_email_user);
         image_avatar = navigationView.getHeaderView(0).findViewById(R.id.image_avatar);
     }
+
     public void showUserInfomation() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {

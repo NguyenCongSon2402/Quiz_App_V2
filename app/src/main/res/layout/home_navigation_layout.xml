@@ -29,13 +29,12 @@
 
         <FrameLayout
             android:id="@+id/frame_layout"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
-            android:animateLayoutChanges="true" />
-
-
-
+            android:animateLayoutChanges="true"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav" />
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
