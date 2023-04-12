@@ -73,8 +73,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listCategory"
-        android:layout_width="376dp"
-        android:layout_height="303dp"
+        android:layout_width="362dp"
+        android:layout_height="336dp"
         android:layout_marginTop="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
