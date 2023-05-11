@@ -11,6 +11,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import by.nguyencongson.quiz_app.model.User;
 
 public class RegisterUser extends AppCompatActivity implements View.OnClickListener {
-    private TextView banner, registerUser;
+    private TextView banner;
+    private ImageView registerUser;
     private EditText editTextFullName, editTextPassword, editTextEmail;
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
@@ -42,12 +44,11 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         dialog = new ProgressDialog(this);
         banner = (TextView) findViewById(R.id.banner);
         banner.setOnClickListener(this);
-        registerUser = (Button) findViewById(R.id.registerUser);
+        registerUser = (ImageView) findViewById(R.id.registerUser);
         registerUser.setOnClickListener(this);
         editTextFullName = (EditText) findViewById(R.id.fullName);
         editTextPassword = (EditText) findViewById(R.id.password);
         editTextEmail = (EditText) findViewById(R.id.email);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
 
     @Override

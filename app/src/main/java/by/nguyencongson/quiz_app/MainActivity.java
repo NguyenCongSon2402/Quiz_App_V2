@@ -9,6 +9,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,9 +28,8 @@ import by.nguyencongson.quiz_app.model.User;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView register, forgotPassword;
-    private boolean isAdmin = false;
     private EditText editTextEmail, editTextPassword;
-    private Button signIn, loginAdmin;
+    private ImageView signIn;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
     private FirebaseDatabase databaseUser;
@@ -46,13 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         register = (TextView) findViewById(R.id.register);
         register.setOnClickListener(this);
-        signIn = (Button) findViewById(R.id.signIn);
-        loginAdmin = (Button) findViewById(R.id.btnLoginAdmin);
-        loginAdmin.setOnClickListener(this);
+        signIn = (ImageView) findViewById(R.id.signIn);
         signIn.setOnClickListener(this);
         editTextEmail = (EditText) findViewById(R.id.email);
         editTextPassword = (EditText) findViewById(R.id.password);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar);
         forgotPassword = (TextView) findViewById(R.id.forgotPassword);
         forgotPassword.setOnClickListener(this);
     }
@@ -64,15 +62,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, RegisterUser.class));
                 break;
             case R.id.signIn:
-                isAdmin = false;
                 userLogin();
                 break;
             case R.id.forgotPassword:
                 startActivity(new Intent(this, ForgotPassword.class));
-                break;
-            case R.id.btnLoginAdmin:
-                isAdmin = true;
-                userLogin();
                 break;
         }
     }
@@ -100,8 +93,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editTextPassword.requestFocus();
             return;
         }
-        if (email.equals("suytdeptrai2402@gmail.com"))
-            isAdmin = true;
         progressBar.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
