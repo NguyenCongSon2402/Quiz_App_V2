@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
-    android:background="@color/teal_700"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
     android:padding="20dp"
     android:gravity="bottom"
     android:orientation="vertical">
@@ -21,14 +21,14 @@
         android:layout_marginTop="8dp"
         android:text="Son"
         android:textColor="@color/black"
-        android:textSize="16dp" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_email_user"
         android:layout_width="wrap_content"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:text="suytdeptrai2402@gmail.com"
         android:textColor="@color/black"
-        android:textSize="16dp" />
-
+        android:textSize="18sp" />
 </LinearLayout>
