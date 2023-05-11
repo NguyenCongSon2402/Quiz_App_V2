@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,7 @@ public class ProfileFragment extends Fragment {
     private View myFragment;
     private ImageView imageAvatar;
     private EditText edtFullname, edt_email;
+    private TextView Fullname;
     private Button btnUpdateProfile;
     private Uri uri;
     private ProgressDialog dialog;
@@ -100,6 +102,7 @@ public class ProfileFragment extends Fragment {
                     dialog.dismiss();
                     Toast.makeText(getActivity(), "Update profile succes", Toast.LENGTH_SHORT).show();
                     homeNavigationActivity.showUserInfomation();
+                    setUserVisibleHint(true);
                 }
             }
         });
@@ -130,6 +133,7 @@ public class ProfileFragment extends Fragment {
         String email = user.getEmail();
         Uri photo = user.getPhotoUrl();
         edtFullname.setText(name);
+        Fullname.setText(name);
         edt_email.setText(email);
 //        Common.currentUser.setUserName(user.getDisplayName());
 //        Common.currentUser.setEmail(user.getEmail());
@@ -139,6 +143,7 @@ public class ProfileFragment extends Fragment {
     private void init() {
         imageAvatar = (ImageView) myFragment.findViewById(R.id.image_avatar);
         edtFullname = myFragment.findViewById(R.id.edt_full_name);
+        Fullname = myFragment.findViewById(R.id.txt_name);
         edt_email = myFragment.findViewById(R.id.edt_email);
         btnUpdateProfile = myFragment.findViewById(R.id.btn_update_profile);
     }
@@ -152,4 +157,13 @@ public class ProfileFragment extends Fragment {
         this.uri = uri;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            // Refresh your fragment here
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+            Log.i("IsRefresh", "Yes");
+        }
+    }
 }

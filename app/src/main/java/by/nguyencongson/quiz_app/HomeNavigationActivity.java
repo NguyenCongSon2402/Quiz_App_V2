@@ -26,11 +26,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
+import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,6 +41,8 @@ import java.io.IOException;
 
 import by.nguyencongson.quiz_app.common.Common;
 import by.nguyencongson.quiz_app.model.User;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 public class HomeNavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
@@ -50,9 +50,11 @@ public class HomeNavigationActivity extends AppCompatActivity implements Navigat
     private ImageView image_avatar;
     private TextView tv_name_user, tv_email_user;
     private NavigationView navigationView;
+    private MeowBottomNavigation meowBottomNavigation;
     private Fragment selectFragment = null;
     private User user1;
     final private ProfileFragment profileFragment = new ProfileFragment();
+    final private SettingFragment settingFragment = new SettingFragment();
     final private ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -80,26 +82,42 @@ public class HomeNavigationActivity extends AppCompatActivity implements Navigat
         setContentView(R.layout.home_navigation_layout);
         initUi();
         showUserInfomation();
-        loadDefaultFragment();
+        loadFragment(new CategoryFragment());
+        meowBottomNavigation.setOnClickMenuListener(new Function1<MeowBottomNavigation.Model, Unit>() {
+            @Override
+            public Unit invoke(MeowBottomNavigation.Model model) {
+                switch (model.getId()) {
+                    case 1:
+                        loadFragment(new CategoryFragment());
+                        break;
+
+                    case 2:
+                        loadFragment(new RankingFragment());
+                        break;
+
+                    case 3:
+                        loadFragment(settingFragment);
+                        break;
+
+                    case 4:
+                        loadFragment(profileFragment);
+                        break;
+
+                }
+                return null;
+            }
+        });
+        //showUserInfomation();
+//        loadDefaultFragment();
     }
 
     private void initUi() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView = findViewById(R.id.navigation_view);
-//        navigationView.setItemIconTintList(null);
-//        NavController navController = Navigation.findNavController(this, R.id.frame_layout);
-//        NavigationUI.setupWithNavController(navigationView, navController);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(true);
-
-        tv_name_user = navigationView.getHeaderView(0).findViewById(R.id.tv_name_user);
-        tv_email_user = navigationView.getHeaderView(0).findViewById(R.id.tv_email_user);
-        image_avatar = navigationView.getHeaderView(0).findViewById(R.id.image_avatar);
+        meowBottomNavigation = findViewById(R.id.meowBottomNavigation);
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.ic_baseline_home_24));
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.ic_baseline_star_rate_24));
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.baseline_settings_24));
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(4, R.drawable.baseline_manage_accounts_24));
+        meowBottomNavigation.show(1, true);
     }
 
     public void showUserInfomation() {
@@ -109,17 +127,19 @@ public class HomeNavigationActivity extends AppCompatActivity implements Navigat
         }
         String name = user.getDisplayName();
         String email = user.getEmail();
+        user1 = new User(name, email);
+        Common.currentUser = user1;
         Uri photo = user.getPhotoUrl();
-        if (name == null) {
-            tv_name_user.setVisibility(View.GONE);
-        } else {
-            tv_name_user.setVisibility(View.VISIBLE);
-            tv_name_user.setText(name);
-            user1 = new User(name, email);
-            Common.currentUser = user1;
-        }
-        tv_email_user.setText(email);
-        Glide.with(this).load(photo).error(R.drawable.baseline_manage_accounts_24).into(image_avatar);
+//        if (name == null) {
+//            tv_name_user.setVisibility(View.GONE);
+//        } else {
+//            tv_name_user.setVisibility(View.VISIBLE);
+//            tv_name_user.setText(name);
+//            user1 = new User(name, email);
+//            Common.currentUser = user1;
+//        }
+        //tv_email_user.setText(email);
+        //Glide.with(this).load(photo).error(R.drawable.baseline_manage_accounts_24).into(image_avatar);
     }
 
     @Override
@@ -156,16 +176,7 @@ public class HomeNavigationActivity extends AppCompatActivity implements Navigat
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
                 break;
-            case R.id.nav_profile:// giờ xử lí ntn anh
-//                if (selectFragment != null && selectFragment instanceof ProfileFragment) {
-//                    mDrawerLayout.closeDrawer(GravityCompat.START);
-//                } else {
-//                    //a vừa thêm z
-//                    //getSupportFragmentManager().popBackStack("FRAG", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                    selectFragment = null;
-//                    selectFragment = profileFragment;
-//                    loadFragment(selectFragment);
-//                }
+            case R.id.nav_profile:
                 selectFragment = profileFragment;
                 loadFragment(selectFragment);
                 break;
@@ -180,41 +191,8 @@ public class HomeNavigationActivity extends AppCompatActivity implements Navigat
         //Nó sẽ add 2 thằng category vào backstack
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, selectFragment);
-        transaction.addToBackStack("FRAG");
         transaction.commit();
     }
-
-    @Override
-    public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            //Nó chạy vào case này ?
-            //Khi đấy ở đây phải ấn 2 lần mới chạy vào case else
-            //
-
-            navigationView.getMenu().getItem(0).setChecked(true);
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                FragmentManager fm = getSupportFragmentManager(); // or 'getSupportFragmentManager();'
-                int count = fm.getBackStackEntryCount();
-                for (int i = 0; i < count; ++i) {
-                    fm.popBackStack();
-                }
-                Log.e("LOG", "HE");
-                getSupportFragmentManager().popBackStack("FRAG", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            } else {
-
-                // Close
-                // getSupportFragmentManager().popBackStack("FRAGHOME", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                Log.e("LOG", "HA");
-//                super.onBackPressed();
-                System.exit(0);
-            }
-//
-
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

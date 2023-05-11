@@ -57,7 +57,6 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myFragment = inflater.inflate(R.layout.fragment_category_fargment, container, false);
-        //View thì k cần ép kiểu như này
         rvListCategory = myFragment.findViewById(R.id.listCategory);// em dungf casi nayf thif no loi
         // thằng layout manager này á
 
@@ -77,8 +76,6 @@ public class CategoryFragment extends Fragment {
 
 
     private void loadCategories() {
-
-        // null trong này á
 
         Query query = firebaseDatabase.getReference().child("category");
 
