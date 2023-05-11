@@ -82,7 +82,7 @@
                 android:drawablePadding="16dp"
                 android:ems="10"
                 android:hint="Email"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:padding="8dp"
                 android:textColorHint="#756c6c" />
 
@@ -185,6 +185,11 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

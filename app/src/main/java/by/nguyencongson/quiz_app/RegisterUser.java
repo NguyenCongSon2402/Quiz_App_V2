@@ -49,6 +49,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         editTextFullName = (EditText) findViewById(R.id.fullName);
         editTextPassword = (EditText) findViewById(R.id.password);
         editTextEmail = (EditText) findViewById(R.id.email);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
 
     @Override
