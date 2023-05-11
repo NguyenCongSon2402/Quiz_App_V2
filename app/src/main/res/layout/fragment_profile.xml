@@ -65,12 +65,12 @@
 
         <Button
             android:id="@+id/btn_update_profile"
-            android:layout_width="179dp"
-            android:layout_height="47dp"
-            android:layout_marginTop="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="20sp"
             android:background="@drawable/btn"
-            android:text="Update Profile"
+            android:text="Update"
             android:textStyle="bold" />
 
     </LinearLayout>
