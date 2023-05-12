@@ -1,6 +1,7 @@
 package by.nguyencongson.quiz_app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.vimalcvs.switchdn.DayNightSwitch;
 import com.vimalcvs.switchdn.DayNightSwitchListener;
 
@@ -27,7 +30,9 @@ public class SettingFragment extends Fragment {
     private SwitchCompat switchCompat;
     private LinearLayout backgroundView;
     private View myFragment;
-    private ImageView imageAvatar;
+    private ImageView imageAvatar, logOut, forgotPassword;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
     private SharedPreferences sharedPreferences;
     private HomeNavigationActivity homeNavigationActivity;
 
@@ -72,11 +77,21 @@ public class SettingFragment extends Fragment {
                 }
             }
         });
+        logOut.setOnClickListener(v -> {
+            mAuth.signOut();
+            startActivity(new Intent(getContext(), MainActivity.class));
+            getActivity().finish();
+        });
+        forgotPassword.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), ForgotPassword.class));
+        });
         return myFragment;
     }
 
     private void init() {
-        imageAvatar = (ImageView) myFragment.findViewById(R.id.image_avatar);
+        imageAvatar = myFragment.findViewById(R.id.image_avatar);
+        logOut = myFragment.findViewById(R.id.logout);
+        forgotPassword=myFragment.findViewById(R.id.forgotPassword);
         switchCompat = myFragment.findViewById(R.id.theme);
         backgroundView = myFragment.findViewById(R.id.background_view);
     }

@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,14 +68,13 @@ public class CategoryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myFragment = inflater.inflate(R.layout.fragment_category_fargment, container, false);
         rvListCategory = myFragment.findViewById(R.id.listCategory);
-        backgroundView=myFragment.findViewById(R.id.background_view);
+        backgroundView = myFragment.findViewById(R.id.background_view);
         sharedPreferences = getContext().getSharedPreferences("THEME", Context.MODE_PRIVATE);
         Common.is_night = sharedPreferences.getBoolean("is_night", false);
         if (Common.is_night == true) {
             Drawable drawable = getResources().getDrawable(R.drawable.background_btn_menu);
             backgroundView.setBackground(drawable);
-        }
-        else {
+        } else {
             Drawable drawable = getResources().getDrawable(R.drawable.background_banner);
             backgroundView.setBackground(drawable);
         }
@@ -94,58 +96,58 @@ public class CategoryFragment extends Fragment {
 
     private void loadCategories() {
 
-        Query query = firebaseDatabase.getReference().child("category");
+            Query query = firebaseDatabase.getReference().child("category");
 
-        FirebaseRecyclerOptions<Category> options =
-                new FirebaseRecyclerOptions.Builder<Category>()
-                        .setQuery(query, Category.class)
-                        .build();
-        adapter = new FirebaseRecyclerAdapter<Category, CategoryViewHolder>(options) {
+            FirebaseRecyclerOptions<Category> options =
+                    new FirebaseRecyclerOptions.Builder<Category>()
+                            .setQuery(query, Category.class)
+                            .build();
+            adapter = new FirebaseRecyclerAdapter<Category, CategoryViewHolder>(options) {
 
-            @Override
-            public int getItemCount() {
-                Log.d("TESTING", "getItemCount: "+super.getItemCount());
-                // Chỗ này nó đang bị delay khi trả về kết quả
+                @Override
+                public int getItemCount() {
+                    Log.d("TESTING", "getItemCount: " + super.getItemCount());
+                    // Chỗ này nó đang bị delay khi trả về kết quả
 //                D/TESTING: getItemCount: 4
-                return super.getItemCount();
-            }
+                    return super.getItemCount();
+                }
 
-            @NonNull
-            @Override
-            public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.category_layout, parent, false);
+                @NonNull
+                @Override
+                public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    View view = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.category_layout, parent, false);
 
-                return new CategoryViewHolder(view);
-            }
+                    return new CategoryViewHolder(view);
+                }
 
-            @Override
-            protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull Category model) {
-                //Trong này chỉ load data của 1 item
-                holder.category_name.setText(model.getName());
-                Picasso.get().load(model.getImage()).into(holder.category_image);
+                @Override
+                protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull Category model) {
+                    //Trong này chỉ load data của 1 item
+                    holder.category_name.setText(model.getName());
+                    Picasso.get().load(model.getImage()).into(holder.category_image);
 
-                holder.setiItemClickListener(new IItemClickListener() {
-                    @Override
-                    public void onClick(View view, int position, boolean isLongClick) {
-                        //Toast.makeText(getContext(), String.format("%d|%s", position, adapter.getRef(position).getKey()), Toast.LENGTH_LONG).show();
-                        Intent startGame = new Intent(getActivity(), StartActivity.class);
-                        Common.CategoryId = adapter.getRef(position).getKey();
-                        Common.categoryName = model.getName();
-                        Log.e("loi1", Common.CategoryId);
-                        startGame.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        startActivity(startGame);
+                    holder.setiItemClickListener(new IItemClickListener() {
+                        @Override
+                        public void onClick(View view, int position, boolean isLongClick) {
+                            //Toast.makeText(getContext(), String.format("%d|%s", position, adapter.getRef(position).getKey()), Toast.LENGTH_LONG).show();
+                            Intent startGame = new Intent(getActivity(), StartActivity.class);
+                            Common.CategoryId = adapter.getRef(position).getKey();
+                            Common.categoryName = model.getName();
+                            Log.e("loi1", Common.CategoryId);
+                            startGame.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            startActivity(startGame);
 //                        getActivity().finish();
-                    }
-                });
+                        }
+                    });
 
-            }
-        };
+                }
+            };
 
-        //Query params ở đây đang trả ra {} không có data
-        rvListCategory.setAdapter(adapter);
-        adapter.startListening();// :)))))
+            //Query params ở đây đang trả ra {} không có data
+            rvListCategory.setAdapter(adapter);
+            adapter.startListening();// :)))))
 
-        Log.d("TESTING", "loadCategories: "+getActivity().getSupportFragmentManager().getBackStackEntryCount());
+            Log.d("TESTING", "loadCategories: " + getActivity().getSupportFragmentManager().getBackStackEntryCount());
+        }
     }
-}

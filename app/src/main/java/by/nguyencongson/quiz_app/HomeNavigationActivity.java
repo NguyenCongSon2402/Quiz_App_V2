@@ -1,8 +1,11 @@
 package by.nguyencongson.quiz_app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -50,7 +54,7 @@ public class HomeNavigationActivity extends AppCompatActivity {
     private TextView tv_name_user, tv_email_user;
     private MeowBottomNavigation meowBottomNavigation;
     private User user1;
-    public Fragment currentFragment= null;
+    public Fragment currentFragment = null;
     final private ProfileFragment profileFragment = new ProfileFragment();
     final private ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -78,6 +82,18 @@ public class HomeNavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_navigation_layout);
         initUi();
+        // Kiểm tra kết nối mạng
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo == null || !networkInfo.isConnected()) {
+            // Hiển thị thông báo
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeNavigationActivity.this);
+            builder.setTitle("No network connection")
+                    .setMessage("Please check your network connection and try again.")
+                    .setPositiveButton("OK", null)
+                    .show();
+            return;
+        }
         showUserInfomation();
         //loadFragment(currentFragment);
         defaultFragment();
@@ -145,16 +161,19 @@ public class HomeNavigationActivity extends AppCompatActivity {
         //tv_email_user.setText(email);
         //Glide.with(this).load(photo).error(R.drawable.baseline_manage_accounts_24).into(image_avatar);
     }
+
     private void loadFragment(Fragment selectFragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, selectFragment);
         transaction.commit();
     }
+
     private void defaultFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, new CategoryFragment());
         transaction.commit();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -180,4 +199,19 @@ public class HomeNavigationActivity extends AppCompatActivity {
         resultLauncher.launch(Intent.createChooser(intent, "Select Picture"));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo == null || !networkInfo.isConnected()) {
+            // Hiển thị thông báo
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeNavigationActivity.this);
+            builder.setTitle("No network connection")
+                    .setMessage("Please check your network connection and try again.")
+                    .setPositiveButton("OK", null)
+                    .show();
+            return;
+        }
+    }
 }

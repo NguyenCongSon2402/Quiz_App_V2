@@ -118,7 +118,7 @@ public class ProfileFragment extends Fragment {
                             .setValue(user1);
                     dialog.dismiss();
                     Toast.makeText(getActivity(), "Update profile succes", Toast.LENGTH_SHORT).show();
-                    homeNavigationActivity.showUserInfomation();
+                    setUserInformation();
                     setUserVisibleHint(true);
                 }
             }
@@ -162,6 +162,7 @@ public class ProfileFragment extends Fragment {
         edtFullname = myFragment.findViewById(R.id.edt_full_name);
         Fullname = myFragment.findViewById(R.id.txt_name);
         edt_email = myFragment.findViewById(R.id.edt_email);
+        edt_email.setEnabled(false);
         btnUpdateProfile = myFragment.findViewById(R.id.btn_update_profile);
         backgroundView=myFragment.findViewById(R.id.background_view);
     }
@@ -184,4 +185,5 @@ public class ProfileFragment extends Fragment {
             Log.i("IsRefresh", "Yes");
         }
     }
+
 }

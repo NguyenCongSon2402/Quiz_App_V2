@@ -96,30 +96,60 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/imgnotification"
+                        android:id="@+id/iconLogut"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/round_back_secondary_100"
                         android:padding="12dp"
-                        android:src="@drawable/baseline_notifications_24" />
+                        android:src="@drawable/ic_baseline_power_settings_new_24" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="20dp"
-                        android:layout_toEndOf="@+id/imgnotification"
-                        android:text="Notifications"
+                        android:layout_toEndOf="@+id/iconLogut"
+                        android:text="Logout"
                         android:textStyle="bold" />
-
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/notification"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <ImageView
+                        android:id="@+id/logout"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="12dp"
+                        android:background="@drawable/round_back_secondary_100"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:checked="false"
-                        android:switchMinWidth="50dp" />
+                        android:src="@drawable/ic_baseline_power_settings_new_24" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/Forgotpassword"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/round_back_secondary_100"
+                        android:padding="12dp"
+                        android:src="@drawable/icon_forgot_password" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@+id/Forgotpassword"
+                        android:text="Forgot password"
+                        android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/forgotPassword"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="12dp"
+                        android:background="@drawable/round_back_secondary_100"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_forgot_password" />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
