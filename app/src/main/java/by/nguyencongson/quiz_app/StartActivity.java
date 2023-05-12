@@ -2,10 +2,14 @@ package by.nguyencongson.quiz_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,6 +27,8 @@ public class StartActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference questions;
+    private SharedPreferences sharedPreferences;
+    private RelativeLayout backgroundView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,17 @@ public class StartActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         questions = database.getReference("Questions");
         loadQuestion(Common.CategoryId);
+        backgroundView=findViewById(R.id.background_view);
+        sharedPreferences = this.getSharedPreferences("THEME", Context.MODE_PRIVATE);
+        Common.is_night = sharedPreferences.getBoolean("is_night", false);
+        if (Common.is_night == true) {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_btn_menu);
+            backgroundView.setBackground(drawable);
+        }
+        else {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_banner);
+            backgroundView.setBackground(drawable);
+        }
         btnPlay=(Button) findViewById(R.id.btnPlay);
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override

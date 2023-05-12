@@ -10,6 +10,7 @@ public class Common {
     public static String CategoryId,categoryName;
     public static User currentUser;
     public static List<Question> questionList = new ArrayList<>();
+    public static Boolean is_night;
 
 
 }

@@ -4,8 +4,11 @@ import static by.nguyencongson.quiz_app.HomeNavigationActivity.MY_REQUEST_CODE;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +49,8 @@ public class ProfileFragment extends Fragment {
     private TextView Fullname;
     private Button btnUpdateProfile;
     private Uri uri;
+    private SharedPreferences sharedPreferences;
+    private RelativeLayout backgroundView;
     private ProgressDialog dialog;
     private HomeNavigationActivity homeNavigationActivity;
 
@@ -57,6 +64,16 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myFragment = inflater.inflate(R.layout.fragment_profile, container, false);
         init();
+        sharedPreferences = getContext().getSharedPreferences("THEME", Context.MODE_PRIVATE);
+        Common.is_night = sharedPreferences.getBoolean("is_night", false);
+        if (Common.is_night == true) {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_btn_menu);
+            backgroundView.setBackground(drawable);
+        }
+        else {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_banner);
+            backgroundView.setBackground(drawable);
+        }
         homeNavigationActivity = (HomeNavigationActivity) getActivity();
         dialog = new ProgressDialog(getActivity());
         setUserInformation();
@@ -146,6 +163,7 @@ public class ProfileFragment extends Fragment {
         Fullname = myFragment.findViewById(R.id.txt_name);
         edt_email = myFragment.findViewById(R.id.edt_email);
         btnUpdateProfile = myFragment.findViewById(R.id.btn_update_profile);
+        backgroundView=myFragment.findViewById(R.id.background_view);
     }
 
     public void setBitmapImageView(Bitmap bitmapImageView) {

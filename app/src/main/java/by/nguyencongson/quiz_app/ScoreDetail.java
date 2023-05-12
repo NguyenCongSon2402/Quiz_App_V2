@@ -7,10 +7,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -18,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import by.nguyencongson.quiz_app.common.Common;
 import by.nguyencongson.quiz_app.model.Question;
 import by.nguyencongson.quiz_app.model.QuestionScore;
 import by.nguyencongson.quiz_app.model.Ranking;
@@ -31,6 +36,8 @@ public class ScoreDetail extends AppCompatActivity {
     DatabaseReference question_score;
     RecyclerView scoreList;
     RecyclerView.LayoutManager layoutManager;
+    private SharedPreferences sharedPreferences;
+    private RelativeLayout backgroundView;
     FirebaseRecyclerAdapter<QuestionScore, ScoreDetailViewHolder> adapter;
 
 
@@ -40,7 +47,17 @@ public class ScoreDetail extends AppCompatActivity {
         setContentView(R.layout.activity_score_detail);
         database = FirebaseDatabase.getInstance();
         question_score = database.getReference("Question_Score");
-
+        backgroundView=findViewById(R.id.background_view);
+        sharedPreferences = this.getSharedPreferences("THEME", Context.MODE_PRIVATE);
+        Common.is_night = sharedPreferences.getBoolean("is_night", false);
+        if (Common.is_night == true) {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_btn_menu);
+            backgroundView.setBackground(drawable);
+        }
+        else {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_banner);
+            backgroundView.setBackground(drawable);
+        }
         scoreList = (RecyclerView) findViewById(R.id.scoreList);
         scoreList.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);

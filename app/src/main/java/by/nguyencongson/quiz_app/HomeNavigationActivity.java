@@ -44,17 +44,14 @@ import by.nguyencongson.quiz_app.model.User;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
-public class HomeNavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private DrawerLayout mDrawerLayout;
+public class HomeNavigationActivity extends AppCompatActivity {
     public static final int MY_REQUEST_CODE = 10;
     private ImageView image_avatar;
     private TextView tv_name_user, tv_email_user;
-    private NavigationView navigationView;
     private MeowBottomNavigation meowBottomNavigation;
-    private Fragment selectFragment = null;
     private User user1;
+    public Fragment currentFragment= null;
     final private ProfileFragment profileFragment = new ProfileFragment();
-    final private SettingFragment settingFragment = new SettingFragment();
     final private ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -82,39 +79,46 @@ public class HomeNavigationActivity extends AppCompatActivity implements Navigat
         setContentView(R.layout.home_navigation_layout);
         initUi();
         showUserInfomation();
-        loadFragment(new CategoryFragment());
+        //loadFragment(currentFragment);
+        defaultFragment();
         meowBottomNavigation.setOnClickMenuListener(new Function1<MeowBottomNavigation.Model, Unit>() {
             @Override
             public Unit invoke(MeowBottomNavigation.Model model) {
                 switch (model.getId()) {
                     case 1:
-                        loadFragment(new CategoryFragment());
+                        currentFragment = new CategoryFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
+                        loadFragment(currentFragment);
                         break;
 
                     case 2:
-                        loadFragment(new RankingFragment());
+                        currentFragment = new RankingFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
+                        loadFragment(currentFragment);
                         break;
 
                     case 3:
-                        loadFragment(settingFragment);
+                        currentFragment = new SettingFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
+                        loadFragment(currentFragment);
                         break;
 
                     case 4:
-                        loadFragment(profileFragment);
+                        currentFragment = profileFragment; // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
+                        loadFragment(currentFragment);
+                        break;
+                    default:
+                        currentFragment = new CategoryFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
+                        loadFragment(currentFragment);
                         break;
 
                 }
                 return null;
             }
         });
-        //showUserInfomation();
-//        loadDefaultFragment();
     }
 
     private void initUi() {
         meowBottomNavigation = findViewById(R.id.meowBottomNavigation);
         meowBottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.ic_baseline_home_24));
-        meowBottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.ic_baseline_star_rate_24));
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.rank));
         meowBottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.baseline_settings_24));
         meowBottomNavigation.add(new MeowBottomNavigation.Model(4, R.drawable.baseline_manage_accounts_24));
         meowBottomNavigation.show(1, true);
@@ -141,70 +145,20 @@ public class HomeNavigationActivity extends AppCompatActivity implements Navigat
         //tv_email_user.setText(email);
         //Glide.with(this).load(photo).error(R.drawable.baseline_manage_accounts_24).into(image_avatar);
     }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        //Chỗ này đang có 1 bug đó là khi selectFragmentCategory đang đươc hiện thì rồi nhưng khi click vào item home vẫn tạo mới
-        // Mình phải bắt được hiện tại nó đang ở fragment nào
-        // Sau đo sử lý trong switch case bên dưới
-
-        switch (item.getItemId()) {
-            case R.id.nav_home:// giờ xử lí ntn anh
-                if (selectFragment != null && selectFragment instanceof CategoryFragment) {
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                } else {
-                    //a vừa thêm z
-                    //getSupportFragmentManager().popBackStack("FRAG", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    selectFragment = null;
-                    selectFragment = CategoryFragment.newInstance();
-                    loadFragment(selectFragment);
-                }
-                break;
-            case R.id.nav_ranking:
-                if (selectFragment != null && selectFragment instanceof RankingFragment) {
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                } else {
-//                    getSupportFragmentManager().popBackStack("FRAG", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                    selectFragment = null;
-                    selectFragment = RankingFragment.newInstance();
-                    loadFragment(selectFragment);
-                }
-                break;
-            case R.id.nav_logout:
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-                break;
-            case R.id.nav_profile:
-                selectFragment = profileFragment;
-                loadFragment(selectFragment);
-                break;
-
-        }
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
     private void loadFragment(Fragment selectFragment) {
-        //Nên sẽ bị ảnh hưởng đến đoạn bên dưới này
-        //Nó sẽ add 2 thằng category vào backstack
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, selectFragment);
+        transaction.commit();
+    }
+    private void defaultFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, new CategoryFragment());
         transaction.commit();
     }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d("TESTING", "onDestroy: " + HomeNavigationActivity.class.getName());
-    }
-
-    private void loadDefaultFragment() {
-        selectFragment = CategoryFragment.newInstance();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, selectFragment);
-        transaction.commit();
-
     }
 
     @Override

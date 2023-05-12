@@ -1,6 +1,9 @@
 package by.nguyencongson.quiz_app;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -44,6 +48,8 @@ public class RankingFragment extends Fragment {
     FirebaseDatabase database;
     DatabaseReference questionScore, rankingTbl;
     int sum = 0;
+    private SharedPreferences sharedPreferences;
+    private RelativeLayout backgroundView;
 
 
     public static RankingFragment newInstance() {
@@ -64,6 +70,17 @@ public class RankingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myFragment = inflater.inflate(R.layout.fragment_ranking, container, false);
         //init View
+        backgroundView=myFragment.findViewById(R.id.background_view);
+        sharedPreferences = getContext().getSharedPreferences("THEME", Context.MODE_PRIVATE);
+        Common.is_night = sharedPreferences.getBoolean("is_night", false);
+        if (Common.is_night == true) {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_btn_menu);
+            backgroundView.setBackground(drawable);
+        }
+        else {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_banner);
+            backgroundView.setBackground(drawable);
+        }
         rankingList = (RecyclerView) myFragment.findViewById(R.id.rankingList);
         layoutManager = new LinearLayoutManager(getActivity());
         rankingList.setHasFixedSize(true);

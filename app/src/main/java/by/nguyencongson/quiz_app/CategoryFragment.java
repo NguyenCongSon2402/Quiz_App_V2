@@ -1,11 +1,15 @@
 package by.nguyencongson.quiz_app;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -14,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -36,6 +41,8 @@ public class CategoryFragment extends Fragment {
     private FirebaseRecyclerAdapter<Category, CategoryViewHolder> adapter;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference categories;
+    private SharedPreferences sharedPreferences;
+    private ConstraintLayout backgroundView;
 
     @NonNull
     public static CategoryFragment newInstance() {
@@ -57,8 +64,18 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myFragment = inflater.inflate(R.layout.fragment_category_fargment, container, false);
-        rvListCategory = myFragment.findViewById(R.id.listCategory);// em dungf casi nayf thif no loi
-        // thằng layout manager này á
+        rvListCategory = myFragment.findViewById(R.id.listCategory);
+        backgroundView=myFragment.findViewById(R.id.background_view);
+        sharedPreferences = getContext().getSharedPreferences("THEME", Context.MODE_PRIVATE);
+        Common.is_night = sharedPreferences.getBoolean("is_night", false);
+        if (Common.is_night == true) {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_btn_menu);
+            backgroundView.setBackground(drawable);
+        }
+        else {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_banner);
+            backgroundView.setBackground(drawable);
+        }
 
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);// em custom laij thif xayr ra looix
         // Chỗ này dùng khi mình biết chắc chắn kích thước của các item trong recycler view

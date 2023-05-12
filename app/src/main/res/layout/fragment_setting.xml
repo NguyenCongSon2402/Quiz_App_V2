@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_banner"
@@ -49,18 +50,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/round_back_secondary_100"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:text="Logout"
-                android:textAllCaps="false"
-                android:textStyle="italic" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,6 +80,7 @@
                         android:layout_toEndOf="@+id/nightModeIcon"
                         android:text="Night Mode"
                         android:textStyle="bold" />
+
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/theme"
@@ -128,6 +118,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:checked="false"
                         android:switchMinWidth="50dp" />
                 </RelativeLayout>
             </LinearLayout>

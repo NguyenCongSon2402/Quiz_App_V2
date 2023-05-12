@@ -3,11 +3,15 @@ package by.nguyencongson.quiz_app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,6 +29,8 @@ public class DoneActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     private TextView txtResultScore, getTxtResultQuestion;
     private ProgressBar progressBar;
+    private SharedPreferences sharedPreferences;
+    private RelativeLayout backgroundView;
 
     @Override
     protected void onStart() {
@@ -42,6 +48,17 @@ public class DoneActivity extends AppCompatActivity {
         getTxtResultQuestion = (TextView) findViewById(R.id.txtTotalQuestion);
         progressBar = (ProgressBar) findViewById(R.id.doneProgressBar);
         btnTryAgain = (Button) findViewById(R.id.btnTryAgain);
+        backgroundView=findViewById(R.id.background_view);
+        sharedPreferences = this.getSharedPreferences("THEME", Context.MODE_PRIVATE);
+        Common.is_night = sharedPreferences.getBoolean("is_night", false);
+        if (Common.is_night == true) {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_btn_menu);
+            backgroundView.setBackground(drawable);
+        }
+        else {
+            Drawable drawable = getResources().getDrawable(R.drawable.background_banner);
+            backgroundView.setBackground(drawable);
+        }
         btnTryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
