@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -45,7 +46,7 @@ public class CategoryFragment extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference categories;
     private SharedPreferences sharedPreferences;
-    private ConstraintLayout backgroundView;
+    private LinearLayout backgroundView;
 
     @NonNull
     public static CategoryFragment newInstance() {
@@ -55,9 +56,7 @@ public class CategoryFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);// ở đây ạ
-        // a vẫn thấy có firebase mà nhỉ
-
+        super.onCreate(savedInstanceState);
         firebaseDatabase = FirebaseDatabase.getInstance("https://quizapp-7cf64-default-rtdb.asia-southeast1.firebasedatabase.app/");
 //        categories = firebaseDatabase.getReference("category");
 
@@ -137,7 +136,6 @@ public class CategoryFragment extends Fragment {
                             Log.e("loi1", Common.CategoryId);
                             startGame.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(startGame);
-//                        getActivity().finish();
                         }
                     });
 

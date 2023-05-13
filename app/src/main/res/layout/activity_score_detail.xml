@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:background="#EA5D5D"
+            android:background="@drawable/btn"
+            android:backgroundTint="@color/black"
             android:orientation="horizontal"
             android:weightSum="10">
 
