@@ -59,13 +59,10 @@ public class DoneActivity extends AppCompatActivity {
             Drawable drawable = getResources().getDrawable(R.drawable.background_banner);
             backgroundView.setBackground(drawable);
         }
-        btnTryAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnTryAgain.setOnClickListener(v -> {
 //                startActivity(new Intent(Done.this, HomeNavigationActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
 //                finish();
-                onBackPressed();
-            }
+            onBackPressed();
         });
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
@@ -73,20 +70,18 @@ public class DoneActivity extends AppCompatActivity {
             int totalQuestion = extra.getInt("TOTAL");
             int correctAnswer = extra.getInt("CORRECT");
             FirebaseDatabase.getInstance().getReference("Question_Score").child(String.format("%s_%s", Common.currentUser.getUserName(),
-                    Common.CategoryId)).child("score").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    String a = String.valueOf(task.getResult().getValue());
-                    if (a == "null" || a.isEmpty()) {
-                        a = "0";
-                        uploadPoint2Fb(score, Common.currentUser);
-                    } else {
-                        Log.e("LAG",a);
-                        if(Integer.parseInt(a) < score)
-                        uploadPoint2Fb(score, Common.currentUser);
-                    }
-                }
-            });
+                    Common.CategoryId)).child("score").get().addOnCompleteListener(task -> {
+                        String a = String.valueOf(task.getResult().getValue());
+                        if (a == "null" || a.isEmpty()) {
+                            a = "0";
+                            uploadPoint2Fb(score, Common.currentUser);
+                        } else {
+                            Log.e("LAG",a);
+                            if(Integer.parseInt(a) < score){
+                                uploadPoint2Fb(score, Common.currentUser);
+                            }
+                        }
+                    });
             txtResultScore.setText(String.format("SCORE : %d!", score));
             getTxtResultQuestion.setText(String.format("PASSED : %d / %d", correctAnswer, totalQuestion));
 

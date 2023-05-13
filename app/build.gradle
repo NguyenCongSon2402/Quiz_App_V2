@@ -58,6 +58,4 @@ dependencies {
     implementation 'com.etebarian:meow-bottom-navigation:1.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'com.github.vimalcvs:Day-Night-Switch:1.0.3'
-
-
 }

@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/background_view"
     android:background="@drawable/background_banner"
     tools:context=".RankingFragment">
 
@@ -22,24 +22,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
             android:background="@drawable/btn"
-            android:backgroundTint="@color/black"
-            android:orientation="horizontal"
-            android:weightSum="10">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="8"
-                android:text="Name"
+                android:layout_weight="1"
+                android:text="Category"
                 android:textColor="@android:color/white"
                 android:textSize="24sp" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:text="Score "
                 android:textColor="@android:color/white"
                 android:textSize="24sp" />
