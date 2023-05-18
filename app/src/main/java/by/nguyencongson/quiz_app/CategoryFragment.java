@@ -17,10 +17,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -39,7 +45,6 @@ import by.nguyencongson.quiz_app.viewholder.CategoryViewHolder;
 public class CategoryFragment extends Fragment {
 
     private View myFragment;
-    // Tên view nên có thêm tiền tố để dễ debug
     private RecyclerView rvListCategory;
     private RecyclerView.LayoutManager layoutManager;
     private FirebaseRecyclerAdapter<Category, CategoryViewHolder> adapter;
@@ -47,6 +52,8 @@ public class CategoryFragment extends Fragment {
     private DatabaseReference categories;
     private SharedPreferences sharedPreferences;
     private LinearLayout backgroundView;
+
+    private EditText search_input;
 
     @NonNull
     public static CategoryFragment newInstance() {
@@ -58,7 +65,7 @@ public class CategoryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         firebaseDatabase = FirebaseDatabase.getInstance("https://quizapp-7cf64-default-rtdb.asia-southeast1.firebasedatabase.app/");
-//        categories = firebaseDatabase.getReference("category");
+        categories = firebaseDatabase.getReference("category");
 
     }
 
@@ -67,6 +74,7 @@ public class CategoryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myFragment = inflater.inflate(R.layout.fragment_category_fargment, container, false);
         rvListCategory = myFragment.findViewById(R.id.listCategory);
+        search_input = myFragment.findViewById(R.id.search_input);
         backgroundView = myFragment.findViewById(R.id.background_view);
         sharedPreferences = getContext().getSharedPreferences("THEME", Context.MODE_PRIVATE);
         Common.is_night = sharedPreferences.getBoolean("is_night", false);
@@ -78,74 +86,108 @@ public class CategoryFragment extends Fragment {
             backgroundView.setBackground(drawable);
         }
 
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);// em custom laij thif xayr ra looix
+        search_input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String keyword = s.toString().trim();
+                loadCategories(keyword);
+            }
+        });
+        //StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         // Chỗ này dùng khi mình biết chắc chắn kích thước của các item trong recycler view
         // thì đặt là true => recycler view k phải tính toán lại kích thước cho các view
         // Dùng StaggeredGridLayoutManager thì các view có kích thước khác nhau => conflict với cái setHasFixedSize
-        //rvListCategory.setHasFixedSize(true);// chh
-        // để line cũng vẫn lỗi mà e
-        // hình như do tốc độ mạng
-
-//        layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
-        rvListCategory.setLayoutManager(staggeredGridLayoutManager);
-        loadCategories();
+        //rvListCategory.setHasFixedSize(true);
+        rvListCategory.setLayoutManager(new WrapContentLinearLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        //rvListCategory.setLayoutManager(staggeredGridLayoutManager);
+        loadCategories("");
         return myFragment;
     }
 
 
-    private void loadCategories() {
+    private void loadCategories(String keyword) {
+        Query query;
+        if (TextUtils.isEmpty(keyword)) {
+            query = firebaseDatabase.getReference().child("category");
+            ;
+        } else {
+            query = categories.orderByChild("Name").startAt(keyword).endAt(keyword + "\uf8ff");
+        }
 
-            Query query = firebaseDatabase.getReference().child("category");
+        //query = firebaseDatabase.getReference().child("category");
 
-            FirebaseRecyclerOptions<Category> options =
-                    new FirebaseRecyclerOptions.Builder<Category>()
-                            .setQuery(query, Category.class)
-                            .build();
-            adapter = new FirebaseRecyclerAdapter<Category, CategoryViewHolder>(options) {
+        FirebaseRecyclerOptions<Category> options =
+                new FirebaseRecyclerOptions.Builder<Category>()
+                        .setQuery(query, Category.class)
+                        .build();
+        adapter = new FirebaseRecyclerAdapter<Category, CategoryViewHolder>(options) {
 
-                @Override
-                public int getItemCount() {
-                    Log.d("TESTING", "getItemCount: " + super.getItemCount());
-                    // Chỗ này nó đang bị delay khi trả về kết quả
+            @Override
+            public int getItemCount() {
+                Log.d("TESTING", "getItemCount: " + super.getItemCount());
+                // Chỗ này nó đang bị delay khi trả về kết quả
 //                D/TESTING: getItemCount: 4
-                    return super.getItemCount();
-                }
+                return super.getItemCount();
+            }
 
-                @NonNull
-                @Override
-                public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                    View view = LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.category_layout, parent, false);
+            @NonNull
+            @Override
+            public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.category_layout, parent, false);
 
-                    return new CategoryViewHolder(view);
-                }
+                return new CategoryViewHolder(view);
+            }
 
-                @Override
-                protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull Category model) {
-                    //Trong này chỉ load data của 1 item
-                    holder.category_name.setText(model.getName());
-                    Picasso.get().load(model.getImage()).into(holder.category_image);
+            @Override
+            protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull Category model) {
+                //Trong này chỉ load data của 1 item
+                holder.category_name.setText(model.getName());
+                Picasso.get().load(model.getImage()).into(holder.category_image);
 
-                    holder.setiItemClickListener(new IItemClickListener() {
-                        @Override
-                        public void onClick(View view, int position, boolean isLongClick) {
-                            //Toast.makeText(getContext(), String.format("%d|%s", position, adapter.getRef(position).getKey()), Toast.LENGTH_LONG).show();
-                            Intent startGame = new Intent(getActivity(), StartActivity.class);
-                            Common.CategoryId = adapter.getRef(position).getKey();
-                            Common.categoryName = model.getName();
-                            Log.e("loi1", Common.CategoryId);
-                            startGame.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                            startActivity(startGame);
-                        }
-                    });
+                holder.setiItemClickListener(new IItemClickListener() {
+                    @Override
+                    public void onClick(View view, int position, boolean isLongClick) {
+                        //Toast.makeText(getContext(), String.format("%d|%s", position, adapter.getRef(position).getKey()), Toast.LENGTH_LONG).show();
+                        Intent startGame = new Intent(getActivity(), StartActivity.class);
+                        Common.CategoryId = adapter.getRef(position).getKey();
+                        Common.categoryName = model.getName();
+                        Log.e("loi1", Common.CategoryId);
+                        startGame.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(startGame);
+                    }
+                });
 
-                }
-            };
+            }
+        };
+        //Query params ở đây đang trả ra {} không có data
+        rvListCategory.setAdapter(adapter);
+        onStart();
+        Log.d("TESTING", "loadCategories: " + getActivity().getSupportFragmentManager().getBackStackEntryCount());
+    }
 
-            //Query params ở đây đang trả ra {} không có data
-            rvListCategory.setAdapter(adapter);
-            adapter.startListening();// :)))))
-
-            Log.d("TESTING", "loadCategories: " + getActivity().getSupportFragmentManager().getBackStackEntryCount());
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (adapter != null) {
+            adapter.stopListening();
         }
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (adapter != null) {
+            adapter.startListening();
+        }
+
+    }
+}

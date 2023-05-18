@@ -129,7 +129,7 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
             dataSend.putInt("CORRECT", correctAnswer);
             intent.putExtras(dataSend);
             //Tạo activity Done với nhu cầu là lắng nghe kết quả trả về với request code là Finish
-            startActivityForResult(intent,Global.FINISH);// cái này Global.FINISH là reqeust code ạ
+            startActivityForResult(intent,Global.FINISH);// cái này Global.FINISH là reqeust code
 
 
             //Từ Playing có thể gọi đến nhiều activity khác nhau
