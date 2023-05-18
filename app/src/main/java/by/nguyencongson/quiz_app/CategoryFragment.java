@@ -51,7 +51,7 @@ public class CategoryFragment extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference categories;
     private SharedPreferences sharedPreferences;
-    private LinearLayout backgroundView;
+    private ConstraintLayout backgroundView;
 
     private EditText search_input;
 
@@ -114,12 +114,14 @@ public class CategoryFragment extends Fragment {
 
 
     private void loadCategories(String keyword) {
+        String startValue = keyword.toUpperCase();
+        String endValue = keyword.toLowerCase() + "\uf8ff";
         Query query;
         if (TextUtils.isEmpty(keyword)) {
             query = firebaseDatabase.getReference().child("category");
             ;
         } else {
-            query = categories.orderByChild("Name").startAt(keyword).endAt(keyword + "\uf8ff");
+            query = categories.orderByChild("Name").startAt(startValue).endAt(endValue);
         }
 
         //query = firebaseDatabase.getReference().child("category");

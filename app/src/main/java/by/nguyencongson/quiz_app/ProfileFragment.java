@@ -42,7 +42,7 @@ import by.nguyencongson.quiz_app.R;
 import by.nguyencongson.quiz_app.common.Common;
 import by.nguyencongson.quiz_app.model.User;
 
-public class ProfileFragment extends Fragment {
+public class  ProfileFragment extends Fragment {
     private View myFragment;
     private ImageView imageAvatar;
     private EditText edtFullname, edt_email;

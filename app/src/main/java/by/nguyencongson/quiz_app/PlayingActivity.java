@@ -40,7 +40,7 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
     private ProgressBar progressBar;
     private ImageView question_image;
     private Button btnA, btnB, btnC, btnD;
-    private TextView txtScore, txtQuestionNum, question_text;
+    private TextView txtScore, txtQuestionNum, question_text, timer;
     private ObjectAnimator animation;
     private SharedPreferences sharedPreferences;
     private RelativeLayout backgroundView;
@@ -50,20 +50,20 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playing);
 
-        txtScore = (TextView) findViewById(R.id.txtScore);
-        txtQuestionNum = (TextView) findViewById(R.id.txtTotalQuestion);
-        question_text = (TextView) findViewById(R.id.question_text);
-        question_image = (ImageView) findViewById(R.id.question_image);
+        txtScore = findViewById(R.id.txtScore);
+        txtQuestionNum = findViewById(R.id.txtTotalQuestion);
+        question_text = findViewById(R.id.question_text);
+        timer = findViewById(R.id.timer);
+        question_image = findViewById(R.id.question_image);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        backgroundView=findViewById(R.id.background_view);
+        progressBar = findViewById(R.id.progressBar);
+        backgroundView = findViewById(R.id.background_view);
         sharedPreferences = this.getSharedPreferences("THEME", Context.MODE_PRIVATE);
         Common.is_night = sharedPreferences.getBoolean("is_night", false);
         if (Common.is_night == true) {
             Drawable drawable = getResources().getDrawable(R.drawable.background_btn_menu);
             backgroundView.setBackground(drawable);
-        }
-        else {
+        } else {
             Drawable drawable = getResources().getDrawable(R.drawable.background_banner);
             backgroundView.setBackground(drawable);
         }
@@ -129,7 +129,7 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
             dataSend.putInt("CORRECT", correctAnswer);
             intent.putExtras(dataSend);
             //Tạo activity Done với nhu cầu là lắng nghe kết quả trả về với request code là Finish
-            startActivityForResult(intent,Global.FINISH);// cái này Global.FINISH là reqeust code
+            startActivityForResult(intent, Global.FINISH);// cái này Global.FINISH là reqeust code
 
 
             //Từ Playing có thể gọi đến nhiều activity khác nhau
@@ -138,17 +138,15 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    // Khi Done nó bị finish sẽ trả kết quả vào onActivityResult
+    // Phương thức được gọi khi DoneActivity hoàn thành và trả về kết quả. Nếu kết quả là RESULT_OK, PlayingActivity sẽ kết thúc và quay trở lại Activity trước đó.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Kiểm tra xem đúng request code đã gửi k
-        // Đúng thì check theo resultCode
-        if (requestCode == Global.FINISH){
-            if (resultCode == RESULT_OK){
+        if (requestCode == Global.FINISH) {
+            if (resultCode == RESULT_OK) {
                 onBackPressed();
             }
-            if (resultCode == RESULT_CANCELED){
+            if (resultCode == RESULT_CANCELED) {
                 //do something
             }
         }
@@ -157,7 +155,7 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Log.d("TESTING", "onBackPressed: "+PlayingActivity.class.getName());
+        Log.d("TESTING", "onBackPressed: " + PlayingActivity.class.getName());
     }
 
     @Override
@@ -174,7 +172,8 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         mcountDown = new CountDownTimer(TIMEOUT, 10) {
             @Override
             public void onTick(long millisUntilFinished) {
-
+                long seconds = millisUntilFinished / 1000;
+                timer.setText("" + millisUntilFinished / 1000);
 //                Log.v("Log_tag", "Tick of Progress" + progressValue + millisUntilFinished);
                 progressValue++;
                 //Log.d("TAG", "onTick: "+millisUntilFinished);
@@ -182,7 +181,7 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
 //                Log.d("TAG", "onTick: "+percent);
 //                Log.d("Log_tag", "onTick: "+percent);
 //                progressBar.setProgress((int) progressValue * 100 / (TIMEOUT / INTERVAL));
-                progressBar.setProgress((int) (TIMEOUT-millisUntilFinished));
+                progressBar.setProgress((int) (TIMEOUT - millisUntilFinished));
                 //Log.d("TESTING", "onTick: " + progressValue);
             }
 
