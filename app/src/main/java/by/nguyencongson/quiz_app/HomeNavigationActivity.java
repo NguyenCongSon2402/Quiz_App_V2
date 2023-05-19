@@ -45,22 +45,19 @@ public class HomeNavigationActivity extends AppCompatActivity {
     public Fragment currentFragment = null;
     final private ProfileFragment profileFragment = new ProfileFragment();
     final private ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == RESULT_OK) {
-                        Intent intent = result.getData();
-                        if (intent == null) {
-                            return;
-                        }
-                        Uri uri = intent.getData();
-                        profileFragment.setUri(uri);
-                        try {
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                            profileFragment.setBitmapImageView(bitmap);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent intent = result.getData();
+                    if (intent == null) {
+                        return;
+                    }
+                    Uri uri = intent.getData();
+                    profileFragment.setUri(uri);
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                        profileFragment.setBitmapImageView(bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -85,37 +82,34 @@ public class HomeNavigationActivity extends AppCompatActivity {
         showUserInfomation();
         //loadFragment(currentFragment);
         defaultFragment();
-        meowBottomNavigation.setOnClickMenuListener(new Function1<MeowBottomNavigation.Model, Unit>() {
-            @Override
-            public Unit invoke(MeowBottomNavigation.Model model) {
-                switch (model.getId()) {
-                    case 1:
-                        currentFragment = new CategoryFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
-                        loadFragment(currentFragment);
-                        break;
+        meowBottomNavigation.setOnClickMenuListener(model -> {
+            switch (model.getId()) {
+                case 1:
+                    currentFragment = new CategoryFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
+                    loadFragment(currentFragment);
+                    break;
 
-                    case 2:
-                        currentFragment = new RankingFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
-                        loadFragment(currentFragment);
-                        break;
+                case 2:
+                    currentFragment = new RankingFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
+                    loadFragment(currentFragment);
+                    break;
 
-                    case 3:
-                        currentFragment = new SettingFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
-                        loadFragment(currentFragment);
-                        break;
+                case 3:
+                    currentFragment = new SettingFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
+                    loadFragment(currentFragment);
+                    break;
 
-                    case 4:
-                        currentFragment = profileFragment; // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
-                        loadFragment(currentFragment);
-                        break;
-                    default:
-                        currentFragment = new CategoryFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
-                        loadFragment(currentFragment);
-                        break;
+                case 4:
+                    currentFragment = profileFragment; // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
+                    loadFragment(currentFragment);
+                    break;
+                default:
+                    currentFragment = new CategoryFragment(); // Lưu trữ đối tượng Fragment được chuyển đổi gần đây nhất
+                    loadFragment(currentFragment);
+                    break;
 
-                }
-                return null;
             }
+            return null;
         });
     }
 
@@ -167,11 +161,11 @@ public class HomeNavigationActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d("TESTING", "onDestroy: " + HomeNavigationActivity.class.getName());
     }
-
+    // gọi khi người dùng cấp quyền sử dụng ứng dụng.
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_REQUEST_CODE) {
+        if (requestCode == MY_REQUEST_CODE) {// quyền đã được cấp
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery();
             } else {
@@ -179,7 +173,7 @@ public class HomeNavigationActivity extends AppCompatActivity {
             }
         }
     }
-
+//mở thư viện ảnh
     public void openGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");

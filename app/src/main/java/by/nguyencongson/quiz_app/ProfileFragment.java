@@ -34,7 +34,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.PrimitiveIterator;
 
@@ -42,7 +47,7 @@ import by.nguyencongson.quiz_app.R;
 import by.nguyencongson.quiz_app.common.Common;
 import by.nguyencongson.quiz_app.model.User;
 
-public class  ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment {
     private View myFragment;
     private ImageView imageAvatar;
     private EditText edtFullname, edt_email;
@@ -69,8 +74,7 @@ public class  ProfileFragment extends Fragment {
         if (Common.is_night == true) {
             Drawable drawable = getResources().getDrawable(R.drawable.background_btn_menu);
             backgroundView.setBackground(drawable);
-        }
-        else {
+        } else {
             Drawable drawable = getResources().getDrawable(R.drawable.background_banner);
             backgroundView.setBackground(drawable);
         }
@@ -107,22 +111,40 @@ public class  ProfileFragment extends Fragment {
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(strFullName)
                 .setPhotoUri(uri).build();
-
-        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+        Query query1 = usersRef.orderByChild("userName").equalTo(strFullName);
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    User user1 = new User(strFullName, user.getEmail());
-                    FirebaseDatabase.getInstance().getReference("Users")
-                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .setValue(user1);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Tên người dùng đã tồn tại, hiển thị thông báo
+                    edtFullname.setError("Username already exists");
+                    edtFullname.requestFocus();
                     dialog.dismiss();
-                    Toast.makeText(getActivity(), "Update profile succes", Toast.LENGTH_SHORT).show();
-                    setUserInformation();
-                    setUserVisibleHint(true);
+                    return;
+                } else {
+                    user.updateProfile(profileUpdates).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            User user1 = new User(strFullName, user.getEmail());
+                            FirebaseDatabase.getInstance().getReference("Users")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .setValue(user1);
+                            dialog.dismiss();
+                            Toast.makeText(getActivity(), "Update profile succes", Toast.LENGTH_SHORT).show();
+                            setUserInformation();
+                            setUserVisibleHint(true);
+                        }
+                    });
                 }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
+
     }
 
     private void onClickRequesPermission() {
@@ -149,7 +171,7 @@ public class  ProfileFragment extends Fragment {
         String name = user.getDisplayName();
         String email = user.getEmail();
         Uri photo = user.getPhotoUrl();
-        edtFullname.setText(name);
+        //edtFullname.setText(name);
         Fullname.setText(name);
         edt_email.setText(email);
 //        Common.currentUser.setUserName(user.getDisplayName());
@@ -164,7 +186,7 @@ public class  ProfileFragment extends Fragment {
         edt_email = myFragment.findViewById(R.id.edt_email);
         edt_email.setEnabled(false);
         btnUpdateProfile = myFragment.findViewById(R.id.btn_update_profile);
-        backgroundView=myFragment.findViewById(R.id.background_view);
+        backgroundView = myFragment.findViewById(R.id.background_view);
     }
 
     public void setBitmapImageView(Bitmap bitmapImageView) {

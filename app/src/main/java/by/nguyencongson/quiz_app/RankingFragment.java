@@ -85,7 +85,7 @@ public class RankingFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         rankingList.setHasFixedSize(true);
         // Vì phương thức OrderByChild của Firebase sẽ sắp xếp danh sách theo thứ tự tăng dần
-// Vì vậy, cần đảo ngược dữ liệu Recycler của chúng tôi
+// Vì vậy, cần đảo ngược dữ liệu Recycler
 // Bởi LayoutManager
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
@@ -94,12 +94,9 @@ public class RankingFragment extends Fragment {
 
 
         // implememt callback
-        updateScore(Common.currentUser.getUserName(), new IRankingCallBack<Ranking>() {
-            @Override
-            public void callBack(Ranking ranking) {
-                rankingTbl.child(ranking.getUserName()).setValue(ranking);
-                //    showRanking();// sort ranking table and show result
-            }
+        updateScore(Common.currentUser.getUserName(), ranking -> {
+            rankingTbl.child(ranking.getUserName()).setValue(ranking);
+            //    showRanking();// sort ranking table and show result
         });
 
         // set adapter
@@ -114,13 +111,10 @@ public class RankingFragment extends Fragment {
             protected void onBindViewHolder(@NonNull RankingViewHolder holder, int position, @NonNull Ranking model) {
                 holder.txt_name.setText(model.getUserName());
                 holder.txt_score.setText(String.valueOf(model.getScore()));
-                holder.setiItemClickListener(new IItemClickListener() {
-                    @Override
-                    public void onClick(View view, int position, boolean isLongClick) {
-                        Intent scoreDetail= new Intent(getActivity(),ScoreDetail.class);
-                        scoreDetail.putExtra("viewUser",model.getUserName());
-                        startActivity(scoreDetail);
-                    }
+                holder.setiItemClickListener((view, position1, isLongClick) -> {
+                    Intent scoreDetail= new Intent(getActivity(),ScoreDetail.class);
+                    scoreDetail.putExtra("viewUser",model.getUserName());
+                    startActivity(scoreDetail);
                 });
 
             }

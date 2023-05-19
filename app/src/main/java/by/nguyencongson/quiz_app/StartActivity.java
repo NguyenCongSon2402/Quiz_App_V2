@@ -49,12 +49,9 @@ public class StartActivity extends AppCompatActivity {
             backgroundView.setBackground(drawable);
         }
         btnPlay=(Button) findViewById(R.id.btnPlay);
-        btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(StartActivity.this, PlayingActivity.class));
-                finish();
-            }
+        btnPlay.setOnClickListener(v -> {
+            startActivity(new Intent(StartActivity.this, PlayingActivity.class));
+            finish();
         });
     }
 

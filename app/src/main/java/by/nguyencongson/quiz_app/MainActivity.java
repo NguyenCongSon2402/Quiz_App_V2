@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (networkInfo == null || !networkInfo.isConnected()) {
-                // Hiển thị thông báo
+                // Hiển thị thông báo mạng
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("No network connection")
                         .setMessage("Please check your network connection and try again.")
