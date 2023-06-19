@@ -73,7 +73,7 @@ public class RankingFragment extends Fragment {
         backgroundView=myFragment.findViewById(R.id.background_view);
         sharedPreferences = getContext().getSharedPreferences("THEME", Context.MODE_PRIVATE);
         Common.is_night = sharedPreferences.getBoolean("is_night", false);
-        if (Common.is_night == true) {
+        if (Common.is_night) {
             Drawable drawable = getResources().getDrawable(R.drawable.background_btn_menu);
             backgroundView.setBackground(drawable);
         }
